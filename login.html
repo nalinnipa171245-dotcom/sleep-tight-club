@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Login — Sleep Tight</title><link rel="stylesheet" href="/style.css"></head><body>
+<div class="auth-container">
+  <h2>เข้าสู่ระบบ</h2>
+  <form id="loginForm">
+    <label>อีเมล</label><input id="email" type="email" required>
+    <label>รหัสผ่าน</label><input id="password" type="password" required>
+    <button class="btn primary" type="submit">เข้าสู่ระบบ</button>
+  </form>
+  <p id="msg"></p>
+  <p><a href="/">กลับหน้าแรก</a></p>
+</div>
+<script>
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const res = await fetch('/api/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password}) });
+  const j = await res.json();
+  if (j.error) { document.getElementById('msg').innerText = j.error; return; }
+  localStorage.setItem('st_user', j.user.id);
+  localStorage.setItem('st_token', j.token);
+  alert('เข้าสู่ระบบสำเร็จ!');
+  window.location.href = '/timeline.html';
+});
+</script>
+</body></html>

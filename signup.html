@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Signup — Sleep Tight</title><link rel="stylesheet" href="/style.css"></head><body>
+<div class="auth-container">
+  <h2>สมัครสมาชิก (ฟรี)</h2>
+  <form id="signupForm">
+    <label>อีเมล</label><input id="email" type="email" required>
+    <label>รหัสผ่าน</label><input id="password" type="password" required>
+    <button class="btn primary" type="submit">สมัคร</button>
+  </form>
+  <p id="msg"></p>
+  <p><a href="/">กลับหน้าแรก</a></p>
+</div>
+<script>
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const res = await fetch('/api/signup', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password}) });
+  const j = await res.json();
+  if (j.error) { document.getElementById('msg').innerText = j.error; return; }
+  document.getElementById('msg').innerText = 'สมัครสำเร็จ! รหัสคลับของคุณ: ' + j.user.st_id + '\n(โปรดจด user.id เพื่อนำมาใช้ล็อกอินบน demo)';
+});
+</script>
+</body></html>
